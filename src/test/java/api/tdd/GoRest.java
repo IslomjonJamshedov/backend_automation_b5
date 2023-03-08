@@ -8,6 +8,7 @@ import com.github.javafaker.Faker;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import utils.ConfigReader;
@@ -25,8 +26,11 @@ public class GoRest {
 
     Faker faker = new Faker();
 
-    int goRestId;
-
+    int expectedGoRestId;
+    String expectedGoRestName;
+    String expectedGoRestEmail;
+    String expectedGoRestGender;
+    String expectedGoRestStatus;
 
     @BeforeTest
     public void beforeTest() {
@@ -43,7 +47,7 @@ public class GoRest {
 
         // assigned the values to the attributes
         createGoRestUser.setName("Tech Global");
-        createGoRestUser.setGender("Male");
+        createGoRestUser.setGender("male");
         createGoRestUser.setEmail(faker.internet().emailAddress());
         createGoRestUser.setStatus("active");
 
@@ -71,14 +75,14 @@ public class GoRest {
 
         System.out.println("======= Fetching the user with GET request =========");
 
-        goRestId = response.jsonPath().getInt("id");
+        expectedGoRestId = response.jsonPath().getInt("id");
 
         response = RestAssured
                 .given().log().all()
 //                .header("Content-Type", "application/json")
                 .contentType(ContentType.JSON)
                 .header("Authorization", ConfigReader.getProperty("GoRestToken"))
-                .when().get("/public/v2/users/" + goRestId)
+                .when().get("/public/v2/users/" + expectedGoRestId)
                 .then().log().all()
                 //validating the status code with rest assured
                 .and().assertThat().statusCode(200)
@@ -103,7 +107,7 @@ public class GoRest {
                 .header("Authorization", ConfigReader.getProperty("GoRestToken"))
                 .body(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(updateGoRestUser))
 //                .when().post("https://gorest.co.in/public/v2/users")
-                .when().put("/public/v2/users/" + goRestId)
+                .when().put("/public/v2/users/" + expectedGoRestId)
                 .then().log().all()
                 //validating the status code with rest assured
                 .and().assertThat().statusCode(200)
@@ -115,6 +119,23 @@ public class GoRest {
                 .contentType(ContentType.JSON)
                 .extract().response();
 
+        expectedGoRestName = updateGoRestUser.getName();
+        expectedGoRestEmail = updateGoRestUser.getEmail();
+        expectedGoRestGender = createGoRestUser.getGender();
+        expectedGoRestStatus = createGoRestUser.getStatus();
+
+        // "id" in the getInt is the name of the attribute in the response body
+        int actualGoRestId = response.jsonPath().getInt("id");
+        String actualGoRestName = response.jsonPath().getString("name");
+        String actualGoRestEmail = response.jsonPath().getString("email");
+        String actualGoRestGender = response.jsonPath().getString("gender");
+        String actualGoRestStatus = response.jsonPath().getString("status");
+
+        Assert.assertEquals(actualGoRestId, expectedGoRestId);
+        Assert.assertEquals(actualGoRestName, expectedGoRestName);
+        Assert.assertEquals(actualGoRestEmail, expectedGoRestEmail);
+        Assert.assertEquals(actualGoRestGender, expectedGoRestGender);
+        Assert.assertEquals(actualGoRestStatus, expectedGoRestStatus);
 
         System.out.println("======= Deleting the user with DELETE request =========");
 
@@ -122,7 +143,7 @@ public class GoRest {
                 .given().log().all()
                 .contentType(ContentType.JSON)
                 .header("Authorization", ConfigReader.getProperty("GoRestToken"))
-                .when().delete("/public/v2/users/" + goRestId)
+                .when().delete("/public/v2/users/" + expectedGoRestId)
                 .then().log().all()
                 .and().assertThat().statusCode(204)
                 .time(Matchers.lessThan(2000L))
