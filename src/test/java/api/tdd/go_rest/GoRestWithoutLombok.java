@@ -1,6 +1,6 @@
-package api.tdd;
+package api.tdd.go_rest;
 
-import api.pojo_classes.go_rest.CreateGoRestUser;
+import api.pojo_classes.go_rest.CreateGoRestUserWithoutLombok;
 import api.pojo_classes.go_rest.UpdateGoRestUser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,7 +43,7 @@ public class GoRestWithoutLombok {
     @Test
     public void goRestCRUD() throws JsonProcessingException {
         // Creating a POJO (Bean) object
-        CreateGoRestUser createGoRestUser = new CreateGoRestUser();
+        CreateGoRestUserWithoutLombok createGoRestUser = new CreateGoRestUserWithoutLombok();
 
         // assigned the values to the attributes
         createGoRestUser.setName("Tech Global");

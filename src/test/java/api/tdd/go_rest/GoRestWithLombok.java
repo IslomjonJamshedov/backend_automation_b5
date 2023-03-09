@@ -1,8 +1,6 @@
-package api.tdd;
+package api.tdd.go_rest;
 
-import api.pojo_classes.go_rest.CreateGoRestUser;
 import api.pojo_classes.go_rest.CreateGoRestUserWithLombok;
-import api.pojo_classes.go_rest.UpdateGoRestUser;
 import api.pojo_classes.go_rest.UpdateGoRestUserWithLombok;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,7 +9,6 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
-import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import utils.ConfigReader;
