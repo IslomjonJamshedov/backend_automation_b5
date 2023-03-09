@@ -16,11 +16,11 @@ import org.hamcrest.Matchers;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 
-public class GoRest {
+public class GoRestWithoutLombok {
 
     Response response;
     /**
-     * ObjectMapper is a class coming form fasterxml to convert Java object to Json
+     * ObjectMapper is a class coming form Jackson to convert Java object to Json
      */
     ObjectMapper objectMapper = new ObjectMapper();
 
