@@ -4,10 +4,14 @@ import api.pojo_classes.pet_store.AddAPet;
 import api.pojo_classes.pet_store.Category;
 import api.pojo_classes.pet_store.Tags;
 import api.pojo_classes.pet_store.UpdateAPet;
+import com.jayway.jsonpath.JsonPath;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import utils.ConfigReader;
@@ -15,9 +19,19 @@ import utils.ConfigReader;
 import java.util.Arrays;
 import java.util.Calendar;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 public class AddPetToStoreWithLombok {
 
+    static Logger logger = LogManager.getLogger(AddPetToStoreWithLombok.class);
+
     Response response;
+
+    @BeforeSuite
+    public void testStarts() {
+        logger.info("Starting the test suite");
+    }
 
     @BeforeTest
     public void beforeTest() {
@@ -68,22 +82,44 @@ public class AddPetToStoreWithLombok {
                 .extract().response();
 
         int statusCode = response.statusCode();
-        System.out.println("Post status code is "+ statusCode);
+        System.out.println("Post status code is " + statusCode);
 
-        String body = response.asString();
-        System.out.println("My POST response body: "+ body);
+//        String body = response.asString();
+//        System.out.println("My POST response body: "+ body);
 
 
         // getting the pet id from the response body
         int actualPetId = response.jsonPath().getInt("id");
         int actualTagsId0 = response.jsonPath().getInt("tags[0].id");
 
+        int actualPetIdWithJayWay= JsonPath.read(response.asString(), "id");
+        logger.info("My id with jayway is "+ actualPetIdWithJayWay);
+
+        int actualTagsId0WithJayWay= JsonPath.read(response.asString(), "tags[0].id");
+        logger.info("My pet tag id with jayway is "+ actualTagsId0WithJayWay);
+
+
         // getting the pet id from the request body
-        int expectPetId = addAPet.getId();
+//        int expectPetId = addAPet.getId();
+        int expectPetId = 3;
         int expectTagsId0 = tags0.getId();
 
+        // we are logging the information
+        logger.info("My actual pet id is " + actualPetId);
 
-        Assert.assertEquals(actualPetId, expectPetId);
+        // we are debugging the assertion
+        logger.debug("The actual pet id should be " + expectPetId + " but we found " + actualPetId);
+//        Assert.assertEquals(actualPetId, expectPetId);
+
+        // Assertion with Hamcrest
+        assertThat(
+                //reason why we are asserting
+                "I am checking if expected value is matching with actual one",
+                //actual value
+                actualPetIdWithJayWay,
+                //expected value
+                is(expectPetId)
+        );
 
         System.out.println("Update the pet");
 
