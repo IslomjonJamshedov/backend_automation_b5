@@ -67,6 +67,12 @@ public class AddPetToStoreWithLombok {
                 .assertThat().statusCode(200)
                 .extract().response();
 
+        int statusCode = response.statusCode();
+        System.out.println("Post status code is "+ statusCode);
+
+        String body = response.asString();
+        System.out.println("My POST response body: "+ body);
+
 
         // getting the pet id from the response body
         int actualPetId = response.jsonPath().getInt("id");
