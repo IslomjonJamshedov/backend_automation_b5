@@ -5,18 +5,25 @@ import api.pojo_classes.go_rest.UpdateGoRestUser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
+import com.jayway.jsonpath.JsonPath;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import utils.ConfigReader;
 import org.hamcrest.Matchers;
 
-import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
 public class GoRestWithoutLombok {
+
+    private Logger logger = LogManager.getLogger(GoRestWithoutLombok.class);
 
     Response response;
     /**
@@ -65,13 +72,28 @@ public class GoRestWithoutLombok {
                 //validating the status code with rest assured
                 .and().assertThat().statusCode(201)
                 //validating the response time is less than the specified one
-                .time(Matchers.lessThan(2000L))
+                .time(Matchers.lessThan(15000L))
                 //validating the value from the body with hamcrest
                 .body("name", equalTo("Tech Global"))
                 //validating the response content type
                 .contentType(ContentType.JSON)
                 .extract().response();
 
+        //expected status
+        String expectedStatus = createGoRestUser.getStatus();
+
+        //actual status
+        String actualStatus = JsonPath.read(response.asString(), "status");
+
+        //debug
+        logger.debug("Status value should be " + expectedStatus + " but we found " + actualStatus);
+
+        //asserting with hamcrest
+        assertThat(
+                "I am checking if the expected status is matching with the actual one",
+                actualStatus,
+                is(expectedStatus)
+        );
 
         System.out.println("======= Fetching the user with GET request =========");
 

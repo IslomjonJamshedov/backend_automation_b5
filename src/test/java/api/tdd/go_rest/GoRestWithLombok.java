@@ -88,12 +88,13 @@ public class GoRestWithLombok {
         goRestId = response.jsonPath().getInt("id");
 
         //find expected name with lombok
-        String expectName= createUser.getName();
+        String expectName = createUser.getName();
         //find actual name with JayWay
         String actualName = JsonPath.read(response.asString(), "name");
 
+        logger.info("Checking the values");
         //debug it with logger
-        logger.debug("The name value should "+ expectName+ " but we found "+ actualName);
+        logger.debug("The name value should " + expectName + " but we found " + actualName);
 
         //assert it with Hamcrest
         assertThat(

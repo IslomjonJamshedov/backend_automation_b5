@@ -92,11 +92,11 @@ public class AddPetToStoreWithLombok {
         int actualPetId = response.jsonPath().getInt("id");
         int actualTagsId0 = response.jsonPath().getInt("tags[0].id");
 
-        int actualPetIdWithJayWay= JsonPath.read(response.asString(), "id");
-        logger.info("My id with jayway is "+ actualPetIdWithJayWay);
+        int actualPetIdWithJayWay = JsonPath.read(response.asString(), "id");
+        logger.info("My id with jayway is " + actualPetIdWithJayWay);
 
-        int actualTagsId0WithJayWay= JsonPath.read(response.asString(), "tags[0].id");
-        logger.info("My pet tag id with jayway is "+ actualTagsId0WithJayWay);
+        int actualTagsId0WithJayWay = JsonPath.read(response.asString(), "tags[0].id");
+        logger.info("My pet tag id with jayway is " + actualTagsId0WithJayWay);
 
 
         // getting the pet id from the request body
