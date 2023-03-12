@@ -42,11 +42,11 @@ public class ReadingFromExcelFile {
         logger.info("The second id value is " + secondId);
 
         // getting the last row number from the file
-        int lastRow = sheet.getLastRowNum();
+        int lastRow = sheet.getLastRowNum();  // getting the index
         logger.info("The last row number is " + lastRow);
 
         // getting the last cell number
-        int lastCell = sheet.getRow(1).getLastCellNum();
+        int lastCell = sheet.getRow(1).getLastCellNum(); // getting the length of the last cell
         logger.info("The last cell number from the file is "+ lastCell);
 
         /**
