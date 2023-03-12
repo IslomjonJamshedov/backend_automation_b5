@@ -84,8 +84,8 @@ public class AddPetToStoreWithLombok {
         int statusCode = response.statusCode();
         System.out.println("Post status code is " + statusCode);
 
-//        String body = response.asString();
-//        System.out.println("My POST response body: "+ body);
+        String body = response.asString();
+        System.out.println("My POST response body: " + body);
 
 
         // getting the pet id from the response body
@@ -98,6 +98,8 @@ public class AddPetToStoreWithLombok {
         int actualTagsId0WithJayWay = JsonPath.read(response.asString(), "tags[0].id");
         logger.info("My pet tag id with jayway is " + actualTagsId0WithJayWay);
 
+        int actualCategoryIdWithJayWay = JsonPath.read(response.asString(), "category.id");
+        logger.info("Category id from the response is : " + actualCategoryIdWithJayWay);
 
         // getting the pet id from the request body
 //        int expectPetId = addAPet.getId();
@@ -120,6 +122,17 @@ public class AddPetToStoreWithLombok {
                 //expected value
                 is(expectPetId)
         );
+
+        logger.debug("The actual category id should be " + category.getId() + " but we found " + actualCategoryIdWithJayWay);
+        assertThat(
+                // Reason why you are doing the validation
+                "I am validating the category id",
+                // actual value
+                actualCategoryIdWithJayWay,
+                // expected value
+                is(category.getId())
+        );
+
 
         System.out.println("Update the pet");
 
