@@ -1,4 +1,4 @@
-package api;
+package api.api_automation_sample;
 
 import com.github.javafaker.Faker;
 import io.restassured.RestAssured;
