@@ -41,13 +41,7 @@ public class GoRestWithLombok {
     String expectedGoRestGender;
     String expectedGoRestStatus;
 
-    @BeforeTest
-    public void beforeTest() {
-        System.out.println("Starting the API test");
-        // By having RestAssured URI set implicitly in to rest assured
-        // we just add path to the post call
-        RestAssured.baseURI = ConfigReader.getProperty("GoRestBaseURI");
-    }
+
 
     @Test
     public void goRestCRUDWithLombok() throws JsonProcessingException {
