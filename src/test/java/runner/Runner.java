@@ -64,7 +64,7 @@ public class Runner extends AbstractTestNGCucumberTests {
     } // end cleanUp
 
     private void generatePrettyReportsLocally() {
-        String projectName = "backend_automation_5";
+        String projectName = "backend_automation_b5";
         String reportFilePath = "target";
         File reportOutputDirectory = new File(reportFilePath);
         List<String> jsonFiles = new ArrayList<>();
@@ -82,4 +82,5 @@ public class Runner extends AbstractTestNGCucumberTests {
                 "\n---------------------------------------------------------------------------------------------------------------" +
                 "\n***************************************************************************************************************");
     }
+
 }

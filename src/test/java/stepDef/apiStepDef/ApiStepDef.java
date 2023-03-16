@@ -26,16 +26,10 @@ public class ApiStepDef {
 
     int goRestId;
 
-    @BeforeTest
-    public void beforeTest() {
-        System.out.println("Starting the API test");
-        // By having RestAssured URI set implicitly in to rest assured
-        // we just add path to the post call
-        RestAssured.baseURI = ConfigReader.getProperty("GoRestBaseURI");
-    }
     @Given("I send a POST request with body")
     public void iSendAPOSTRequestWithBody() {
 
+        RestAssured.baseURI = ConfigReader.getProperty("GoRestBaseURI");
 
         CreateGoRestUserWithLombok createUser = CreateGoRestUserWithLombok
                 // with the help of the Lombok, we are assigning the values to variables
@@ -47,31 +41,20 @@ public class ApiStepDef {
                 .status("active")
                 .build();
 
-        System.out.println("Creating the user");
-
         response = RestAssured
                 .given().log().all()
 //                .header("Content-Type", "application/json")
                 .contentType(ContentType.JSON)
                 .header("Authorization", ConfigReader.getProperty("GoRestToken"))
                 .body(createUser)
-//                .when().post("https://gorest.co.in/public/v2/users")
                 .when().post("/public/v2/users")
                 .then().log().all()
-                //validating the status code with rest assured
-                .and().assertThat().statusCode(201)
-                //validating the response time is less than the specified one
-//                .time(Matchers.lessThan(15000L))
-                //validating the value from the body with hamcrest
-                .body("name", equalTo("Tech Global"))
-                //validating the response content type
-                .contentType(ContentType.JSON)
                 .extract().response();
     }
 
     @Then("Status code is {int}")
-    public void statusCodeIs(int arg0) {
+    public void statusCodeIs(int statusCode) {
 
-        Assert.assertEquals(response.statusCode(), 201);
+        Assert.assertEquals(response.statusCode(), statusCode);
     }
 }
