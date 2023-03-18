@@ -42,6 +42,7 @@ public class ExcelUtil {
     public static String getValue(int rowNumber, int cellNumber) {
         row = sheet.getRow(rowNumber);
         cell = row.getCell(cellNumber);
+        cell.setCellType(CellType.STRING);
         return cell.toString();
     }
 
@@ -64,5 +65,28 @@ public class ExcelUtil {
         }
         // returning the list of the list
         return allValues;
+    }
+
+    public static String[][] convertListOfListToMultidimensionalArray(List<List<String>> listOfList) {
+        // Creation multidimensional array
+        String[][] result = new String[listOfList.size()][];
+
+        // loop the lists
+        for (int i = 0; i < listOfList.size(); i++) {
+            // getting the values from each list
+            List<String> currentList = listOfList.get(i);
+            // converting the List to Array and add to multidimensional array
+            result[i] = currentList.toArray(new String[currentList.size()]);
+        }
+        return result;
+    }
+
+    // closing the workbook
+    public static void closingExcelFile() {
+        try {
+            workbook.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
